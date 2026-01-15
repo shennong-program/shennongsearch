@@ -49,6 +49,10 @@ English docs: `docs/en/api/name.md`, `docs/en/api/snnmm.md`.
 
 ```bash
 uv sync --extra dev
+# Test against https://shennongalpha.westlake.edu.cn
+uv run pytest -m api
+
+# Local dev
 SHENNONGALPHA_BASE_URL=http://localhost:4000 uv run pytest -m api
 ```
 
