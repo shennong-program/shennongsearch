@@ -1,0 +1,22 @@
+[project]
+name = "shennongsearch"
+version = "0.1.0"
+description = "ShennongSearch"
+readme = "README.md"
+authors = [{ name = "YANG Zijie (杨子杰)", email = "yangzijie@westlake.edu.cn" }]
+requires-python = ">=3.13"
+dependencies = ["httpx>=0.24", "pydantic>=2.0"]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.4"]
+
+[project.scripts]
+shennongsearch = "shennongsearch:main"
+
+[build-system]
+requires = ["uv_build>=0.9.18,<0.10.0"]
+build-backend = "uv_build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["api: live API tests (network required)"]
