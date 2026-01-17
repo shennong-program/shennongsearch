@@ -49,13 +49,14 @@ Base URL: `https://shennongalpha.westlake.edu.cn`
 
 ### Python 调用示例
 
+`name_type` 可以传入枚举 `NameType`，也可以直接传入字符串值（如 `medicinal_parts`）。
+
 ```python
 from shennongsearch import ShennongSearchClient
-from shennongsearch.models import NameType
 
 client = ShennongSearchClient()
 
-resp = client.name.search(NameType.MEDICINAL_PARTS, q="stem herbaceous", page=1, limit=1)
+resp = client.name.search(name_type="medicinal_parts", q="stem herbaceous", page=1, limit=1)
 print(resp.results[0].en, resp.results[0].zh)
 ```
 

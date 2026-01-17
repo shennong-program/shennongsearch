@@ -49,13 +49,14 @@ Full-text search for list queries. When `q` is empty, it returns the default sor
 
 ### Python Usage
 
+You can pass `NameType` or the raw string value (e.g. `medicinal_parts`) for `name_type`.
+
 ```python
 from shennongsearch import ShennongSearchClient
-from shennongsearch.models import NameType
 
 client = ShennongSearchClient()
 
-resp = client.name.search(NameType.MEDICINAL_PARTS, q="stem herbaceous", page=1, limit=1)
+resp = client.name.search(name_type="medicinal_parts", q="stem herbaceous", page=1, limit=1)
 print(resp.results[0].en, resp.results[0].zh)
 ```
 

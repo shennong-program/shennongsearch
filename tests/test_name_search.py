@@ -21,8 +21,8 @@ TEST_CASES = [
         {"la": "Ephedra sinica", "zh": "草麻黄"},
     ),
     (
-        "medicinal_parts (en)",
-        NameType.MEDICINAL_PARTS,
+        "medicinal_parts (en, string)",
+        "medicinal_parts",
         "stem herbaceous",
         {"en": "stem herbaceous", "zh": "草质茎"},
     ),
