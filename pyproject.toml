@@ -5,7 +5,7 @@ description = "ShennongSearch"
 readme = "README.md"
 authors = [{ name = "YANG Zijie (杨子杰)", email = "yangzijie@westlake.edu.cn" }]
 requires-python = ">=3.13"
-dependencies = ["httpx>=0.24", "pydantic>=2.0"]
+dependencies = ["httpx>=0.24", "pydantic>=2.0", "pandas>=2.0"]
 
 [project.optional-dependencies]
 dev = ["pytest>=7.4"]

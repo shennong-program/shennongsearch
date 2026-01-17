@@ -49,14 +49,39 @@ Full-text search for list queries. When `q` is empty, it returns the default sor
 
 ### Python Usage
 
-You can pass `NameType` or the raw string value (e.g. `medicinal_parts`) for `name_type`.
+Use the type-specific sub API (the examples below reuse the same client):
 
 ```python
 from shennongsearch import ShennongSearchClient
 
 client = ShennongSearchClient()
+```
 
-resp = client.name.search(name_type="medicinal_parts", q="stem herbaceous", page=1, limit=1)
+#### species_origins
+
+```python
+resp = client.name.species_origins.search(q="Ephedra sinica", page=1, limit=1)
+print(resp.results[0].la, resp.results[0].zh)
+```
+
+#### medicinal_parts
+
+```python
+resp = client.name.medicinal_parts.search(q="stem herbaceous", page=1, limit=1)
+print(resp.results[0].en, resp.results[0].zh)
+```
+
+#### processing_methods
+
+```python
+resp = client.name.processing_methods.search(q="segmented", page=1, limit=1)
+print(resp.results[0].en, resp.results[0].zh)
+```
+
+#### special_descriptions
+
+```python
+resp = client.name.special_descriptions.search(q="black", page=1, limit=1)
 print(resp.results[0].en, resp.results[0].zh)
 ```
 
@@ -280,6 +305,133 @@ Response (Chinese query):
       "en": "black",
       "zh": "黑",
       "explanation": "{{langs|zh|en}}\n\n黑色的。 \n Black."
+    }
+  ]
+}
+```
+
+## GET /api/name/all
+
+Fetch the full list for a given `name_type` (no pagination). Suitable for small datasets and one-shot downloads.
+Species data is much larger, so use the search endpoint for species queries; only the three types below are available here.
+
+Currently supported `name_type` values:
+
+- `medicinal_parts`
+- `special_descriptions`
+- `processing_methods`
+
+### Query parameters
+
+| Parameter | Required | Description |
+| --- | --- | --- |
+| `name_type` | Yes | Only the three values above |
+
+### Response
+
+Response shape matches `/api/name/search`, with `q` as an empty string, `page` fixed at `1`, and `limit` equal to the number of results returned.
+
+```json
+{
+  "q": "",
+  "page": 1,
+  "limit": 0,
+  "total": 0,
+  "results": []
+}
+```
+
+### Python usage
+
+```python
+from shennongsearch import ShennongSearchClient
+
+client = ShennongSearchClient()
+
+resp = client.name.medicinal_parts.all()
+print(resp.total, len(resp.results))
+```
+
+To return a pandas DataFrame:
+
+```python
+df = client.name.medicinal_parts.all_dataframe()
+print(df.head())
+```
+
+#### medicinal_parts
+
+Example:
+
+```python
+resp = client.name.medicinal_parts.all()
+print(resp.results[0].en, resp.results[0].zh)
+```
+
+Table structure (DataFrame returns only these columns):
+
+| Column | Type | Description |
+| --- | --- | --- |
+| `en` | `string` | English |
+| `zh` | `string` | Chinese |
+| `explanation` | `string` | Explanation |
+
+#### special_descriptions
+
+Example:
+
+```python
+resp = client.name.special_descriptions.all()
+print(resp.results[0].en, resp.results[0].zh)
+```
+
+Table structure (DataFrame returns only these columns):
+
+| Column | Type | Description |
+| --- | --- | --- |
+| `en` | `string` | English |
+| `zh` | `string` | Chinese |
+| `explanation` | `string` | Explanation |
+
+#### processing_methods
+
+Example:
+
+```python
+resp = client.name.processing_methods.all()
+print(resp.results[0].en, resp.results[0].zh)
+```
+
+Table structure (DataFrame returns only these columns):
+
+| Column | Type | Description |
+| --- | --- | --- |
+| `en` | `string` | English |
+| `zh` | `string` | Chinese |
+| `en_full` | `string` | Full English |
+| `category_major` | `string` | Major category (from `category.major`) |
+| `category_minor` | `string` | Minor category (from `category.minor`) |
+| `explanation` | `string` | Explanation |
+
+### Request
+
+```http
+GET /api/name/all?name_type=medicinal_parts
+```
+
+### Response example
+
+```json
+{
+  "q": "",
+  "page": 1,
+  "limit": 1,
+  "total": 1,
+  "results": [
+    {
+      "en": "stem herbaceous",
+      "zh": "草质茎",
+      "explanation": "{{langs|zh|en}}\n\n草质的茎\nHerbaceous Stem"
     }
   ]
 }

@@ -3,56 +3,54 @@ import os
 import pytest
 
 from shennongsearch import ShennongSearchClient
-from shennongsearch.models import NameType
-
 BASE_URL = os.getenv("SHENNONGALPHA_BASE_URL", "https://shennongalpha.westlake.edu.cn")
 
 TEST_CASES = [
     (
         "species_origins (en)",
-        NameType.SPECIES_ORIGINS,
+        "species_origins",
         "Ephedra sinica",
         {"la": "Ephedra sinica", "zh": "草麻黄"},
     ),
     (
         "species_origins (zh)",
-        NameType.SPECIES_ORIGINS,
+        "species_origins",
         "草麻黄",
         {"la": "Ephedra sinica", "zh": "草麻黄"},
     ),
     (
-        "medicinal_parts (en, string)",
+        "medicinal_parts (en)",
         "medicinal_parts",
         "stem herbaceous",
         {"en": "stem herbaceous", "zh": "草质茎"},
     ),
     (
         "medicinal_parts (zh)",
-        NameType.MEDICINAL_PARTS,
+        "medicinal_parts",
         "草质茎",
         {"en": "stem herbaceous", "zh": "草质茎"},
     ),
     (
         "processing_methods (en)",
-        NameType.PROCESSING_METHODS,
+        "processing_methods",
         "segmented",
         {"en": "segmented", "zh": "段制"},
     ),
     (
         "processing_methods (zh)",
-        NameType.PROCESSING_METHODS,
+        "processing_methods",
         "段制",
         {"en": "segmented", "zh": "段制"},
     ),
     (
         "special_descriptions (en)",
-        NameType.SPECIAL_DESCRIPTIONS,
+        "special_descriptions",
         "black",
         {"en": "black", "zh": "黑"},
     ),
     (
         "special_descriptions (zh)",
-        NameType.SPECIAL_DESCRIPTIONS,
+        "special_descriptions",
         "黑",
         {"en": "black", "zh": "黑"},
     ),
@@ -65,11 +63,12 @@ def _get_field(item, field):
 
 @pytest.mark.api
 @pytest.mark.parametrize(
-    "label,name_type,q,expected", TEST_CASES, ids=[c[0] for c in TEST_CASES]
+    "label,api_name,q,expected", TEST_CASES, ids=[c[0] for c in TEST_CASES]
 )
-def test_name_search_examples(label, name_type, q, expected):
+def test_name_search_examples(label, api_name, q, expected):
     with ShennongSearchClient(base_url=BASE_URL, timeout=10.0) as client:
-        resp = client.name.search(name_type, q=q, page=1, limit=1)
+        api = getattr(client.name, api_name)
+        resp = api.search(q=q, page=1, limit=1)
 
     assert resp.results, f"{label}: expected non-empty results"
     assert (

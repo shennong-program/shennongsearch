@@ -20,11 +20,10 @@ pip install -e .
 
 ```python
 from shennongsearch import ShennongSearchClient
-from shennongsearch.models import NameType
 
 client = ShennongSearchClient()
 
-resp = client.name.search(NameType.SPECIES_ORIGINS, q="Ephedra sinica", page=1, limit=1)
+resp = client.name.species_origins.search(q="Ephedra sinica", page=1, limit=1)
 print(resp.results[0].la, resp.results[0].zh)
 
 snnmm = client.snnmm.get(nmmsn="Example System Name")

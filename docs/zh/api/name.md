@@ -49,14 +49,39 @@ Base URL: `https://shennongalpha.westlake.edu.cn`
 
 ### Python 调用示例
 
-`name_type` 可以传入枚举 `NameType`，也可以直接传入字符串值（如 `medicinal_parts`）。
+按类型调用对应子 API（以下示例复用同一个 client）：
 
 ```python
 from shennongsearch import ShennongSearchClient
 
 client = ShennongSearchClient()
+```
 
-resp = client.name.search(name_type="medicinal_parts", q="stem herbaceous", page=1, limit=1)
+#### species_origins
+
+```python
+resp = client.name.species_origins.search(q="Ephedra sinica", page=1, limit=1)
+print(resp.results[0].la, resp.results[0].zh)
+```
+
+#### medicinal_parts
+
+```python
+resp = client.name.medicinal_parts.search(q="stem herbaceous", page=1, limit=1)
+print(resp.results[0].en, resp.results[0].zh)
+```
+
+#### processing_methods
+
+```python
+resp = client.name.processing_methods.search(q="segmented", page=1, limit=1)
+print(resp.results[0].en, resp.results[0].zh)
+```
+
+#### special_descriptions
+
+```python
+resp = client.name.special_descriptions.search(q="black", page=1, limit=1)
 print(resp.results[0].en, resp.results[0].zh)
 ```
 
@@ -279,6 +304,133 @@ GET /api/name/search?name_type=special_descriptions&q=黑&page=1&limit=1
       "en": "black",
       "zh": "黑",
       "explanation": "{{langs|zh|en}}\n\n黑色的。\nBlack."
+    }
+  ]
+}
+```
+
+## GET /api/name/all
+
+用于一次性获取指定 `name_type` 的全量列表（不分页），适合小规模数据的一键下载。
+由于物种数据量较大，建议使用搜索端口进行查询，因此仅提供下面 3 类。
+
+目前仅开放以下 `name_type`：
+
+- `medicinal_parts`
+- `special_descriptions`
+- `processing_methods`
+
+### Query 参数
+
+| 参数 | 必填 | 说明 |
+| --- | --- | --- |
+| `name_type` | 是 | 仅支持上方三类 |
+
+### 响应结构
+
+响应结构与 `/api/name/search` 一致，`q` 固定为空字符串，`page` 固定为 `1`，`limit` 等于返回数量。
+
+```json
+{
+  "q": "",
+  "page": 1,
+  "limit": 0,
+  "total": 0,
+  "results": []
+}
+```
+
+### Python 调用示例
+
+```python
+from shennongsearch import ShennongSearchClient
+
+client = ShennongSearchClient()
+
+resp = client.name.medicinal_parts.all()
+print(resp.total, len(resp.results))
+```
+
+如需返回 pandas DataFrame：
+
+```python
+df = client.name.medicinal_parts.all_dataframe()
+print(df.head())
+```
+
+#### medicinal_parts
+
+调用示例：
+
+```python
+resp = client.name.medicinal_parts.all()
+print(resp.results[0].en, resp.results[0].zh)
+```
+
+表结构（DataFrame 仅返回以下列）：
+
+| 列 | 类型 | 说明 |
+| --- | --- | --- |
+| `en` | `string` | 英文 |
+| `zh` | `string` | 中文 |
+| `explanation` | `string` | 解释 |
+
+#### special_descriptions
+
+调用示例：
+
+```python
+resp = client.name.special_descriptions.all()
+print(resp.results[0].en, resp.results[0].zh)
+```
+
+表结构（DataFrame 仅返回以下列）：
+
+| 列 | 类型 | 说明 |
+| --- | --- | --- |
+| `en` | `string` | 英文 |
+| `zh` | `string` | 中文 |
+| `explanation` | `string` | 解释 |
+
+#### processing_methods
+
+调用示例：
+
+```python
+resp = client.name.processing_methods.all()
+print(resp.results[0].en, resp.results[0].zh)
+```
+
+表结构（DataFrame 仅返回以下列）：
+
+| 列 | 类型 | 说明 |
+| --- | --- | --- |
+| `en` | `string` | 英文 |
+| `zh` | `string` | 中文 |
+| `en_full` | `string` | 英文全称 |
+| `category_major` | `string` | 分类一级（来自 `category.major`） |
+| `category_minor` | `string` | 分类二级（来自 `category.minor`） |
+| `explanation` | `string` | 解释 |
+
+### 请求示例
+
+```http
+GET /api/name/all?name_type=medicinal_parts
+```
+
+### 响应示例
+
+```json
+{
+  "q": "",
+  "page": 1,
+  "limit": 1,
+  "total": 1,
+  "results": [
+    {
+      "en": "stem herbaceous",
+      "zh": "草质茎",
+      "explanation": "{{langs|zh|en}}\n\n草质的茎\nHerbaceous Stem"
     }
   ]
 }
