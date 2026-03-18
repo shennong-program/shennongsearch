@@ -1,5 +1,7 @@
 import { defineConfig } from 'vitepress'
 
+const repoLink = 'https://github.com/shennong-program/shennongsearch'
+
 const zhSidebar = [
   {
     text: 'API',
@@ -30,6 +32,9 @@ export default defineConfig({
     search: {
       provider: 'local',
     },
+    socialLinks: [
+      { icon: 'github', link: repoLink },
+    ],
   },
   locales: {
     zh: {
