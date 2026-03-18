@@ -27,7 +27,7 @@ resp = client.name.species_origins.search(q="Ephedra sinica", page=1, limit=1)
 print(resp.results[0].la, resp.results[0].zh)
 
 snnmm = client.snnmm.get(nmmsn="Example System Name")
-print(snnmm.total)
+print(snnmm.results[0].snnmm.standardized_translation)
 ```
 
 ## Configuration

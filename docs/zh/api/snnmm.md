@@ -32,6 +32,7 @@ Base URL: `https://shennongalpha.westlake.edu.cn`
 ```
 
 `results` 中每条记录包含 `snnmm`、`nmm_hierarchy`、`synonyms` 等字段。
+其中 `snnmm` 下还包含两个计算字段：`standardized_translation` 与 `standardized_translation_zh`。
 
 ### Python 调用示例
 
@@ -47,9 +48,14 @@ resp = client.snnmm.get(nmmgn="Qing-hao")
 resp = client.snnmm.get(nmmgn_zh="青蒿")
 
 print(resp.total)
+print(resp.results[0].snnmm.standardized_translation)
 ```
 
 ### 请求示例
+
+```http
+GET /api/snnmm?nmm_id=nmm-0001
+```
 
 ```http
 GET /api/snnmm?nmmsn=Artemisia%20annua%20Part-aerial
@@ -79,6 +85,8 @@ GET /api/snnmm?nmmgn_zh=青蒿
       "nmm_id": "nmm-0001",
       "snnmm": {
         "nmm_id": "nmm-0001",
+        "standardized_translation": "Artemisia annua Part-aerial (NMM-0001, Qing-hao)",
+        "standardized_translation_zh": "黄花蒿地上部（NMM-0001，青蒿）",
         "nmmsn": {
           "nmmsn": "Artemisia annua Part-aerial",
           "nmmsn_zh": {

@@ -1,6 +1,3 @@
-from typing import Optional
-
-
 from .base import ApiModel
 
 
@@ -34,10 +31,12 @@ class SnnmmInner(ApiModel):
     nmm_id: str
     nmmsn: NmmsnProps
     nmmgn: NmmgnProps
+    standardized_translation: str
+    standardized_translation_zh: str
 
 
 class NmmHierarchy(ApiModel):
-    parent_nmm_id: Optional[str]
+    parent_nmm_id: str | None
 
 
 class SnnmmRecord(ApiModel):

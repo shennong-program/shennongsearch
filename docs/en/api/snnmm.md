@@ -31,7 +31,7 @@ Exactly one of the above parameters must be provided; otherwise the API returns 
 }
 ```
 
-Each entry in `results` includes fields such as `snnmm`, `nmm_hierarchy`, and `synonyms`.
+Each entry in `results` includes fields such as `snnmm`, `nmm_hierarchy`, and `synonyms`. Under `snnmm`, there are also two computed fields: `standardized_translation` and `standardized_translation_zh`.
 
 ### Python Usage
 
@@ -47,9 +47,14 @@ resp = client.snnmm.get(nmmgn="Qing-hao")
 resp = client.snnmm.get(nmmgn_zh="青蒿")
 
 print(resp.total)
+print(resp.results[0].snnmm.standardized_translation)
 ```
 
 ### Requests
+
+```http
+GET /api/snnmm?nmm_id=nmm-0001
+```
 
 ```http
 GET /api/snnmm?nmmsn=Artemisia%20annua%20Part-aerial
@@ -79,6 +84,8 @@ Response:
       "nmm_id": "nmm-0001",
       "snnmm": {
         "nmm_id": "nmm-0001",
+        "standardized_translation": "Artemisia annua Part-aerial (NMM-0001, Qing-hao)",
+        "standardized_translation_zh": "黄花蒿地上部（NMM-0001，青蒿）",
         "nmmsn": {
           "nmmsn": "Artemisia annua Part-aerial",
           "nmmsn_zh": {
